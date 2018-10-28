@@ -7,38 +7,39 @@ from Constants import MoveDirections, Colors, Sizes, Actors
 
 
 class Player:
-    def __init__(self, bord):
-        self.x = 0
-        self.y = 0
-        self.lastTime = time.time() * 1000
-        self.bord = bord
+    def __init__(self):
+        self.x = 50
+        self.y = 200
+
+        self.speedX = 0
+        self.speedY = 0
+
+        self.rect = Rect(self.x, self.y, 50, 100)
 
     def draw(self, surface):
-        pygame.draw.rect(surface, Colors.GREEN.value,
-                         Rect(self.x * Sizes.SQUARE_SIZE.value, self.y * Sizes.SQUARE_SIZE.value,
-                              Sizes.SQUARE_SIZE.value,
-                              Sizes.SQUARE_SIZE.value))
+        self.rect.x = self.x
+        self.rect.y = self.y
+        pygame.draw.rect(surface, Colors.GREEN.value, self.rect)
 
-    def can_move_to(self, x, y):
-        if x < 0 or y < 0 or x > Sizes.MAP_WIDTH_SQUARE.value or y > Sizes.MAP_HEIGHT_SQUARE.value:
-            return False
-        if self.bord.bord[x][y] == Actors.EMPTY_SPACE:
-            return True
-        return False
+    def tick(self, board, event):
+        if self.rect.colliderect(board.rect):
+            self.speedY = 0
 
-    def tick(self, event):
+        pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_LEFT]:
+            self.speedX = -5
+        elif pressed[pygame.K_RIGHT]:
+            self.speedX = 5
+
         if event is not None:
-            if event.key == pygame.K_UP:
-                if self.can_move_to(self.x, self.y - 1):
-                    self.y -= 1
-            elif event.key == pygame.K_DOWN:
-                if self.can_move_to(self.x, self.y + 1):
-                    self.y += 1
-            elif event.key == pygame.K_LEFT:
-                if self.can_move_to(self.x - 1, self.y):
-                    self.x -= 1
-            elif event.key == pygame.K_RIGHT:
-                if self.can_move_to(self.x + 1, self.y):
-                    self.x += 1
-            elif event.key == pygame.K_SPACE:
-                self.bord.put_bomb(self.x, self.y)
+            if event.key == pygame.K_SPACE:
+                self.speedY = -10
+
+        self.move()
+
+        self.speedY = self.speedY + 0.2
+        self.speedX = self.speedX * 0.8
+
+    def move(self):
+        self.x += self.speedX
+        self.y += self.speedY

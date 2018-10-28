@@ -13,8 +13,9 @@ class Game(object):
         pygame.init()
         self.screen = pygame.display.set_mode(self.resolution)
         self.clock = pygame.time.Clock()
-
         self.board = Board()
+        self.player = Player()
+
         temp_event = None
         while True:
             for event in pygame.event.get():
@@ -35,12 +36,13 @@ class Game(object):
             self.draw()
             pygame.display.flip()
 
-    def tick(self, event):
-        self.board.tick(event)
+    def tick(self, temp_event):
+        self.player.tick(self.board, temp_event)
 
     def draw(self):
         self.board.draw(self.screen)
+        self.player.draw(self.screen)
 
 
-if __name__ == "__main__":  # czy prgrma zostal uruchomiony bezposrednio a nie zaimportowany
+if __name__ == "__main__":  # czy progrma zostal uruchomiony bezposrednio a nie zaimportowany
     Game()
