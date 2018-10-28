@@ -11,17 +11,20 @@ class Player:
         self.x = 50
         self.y = 200
 
+        self.width = 50
+        self.height = 100
+
         self.speedX = 0
         self.speedY = 0
 
-        self.rect = Rect(self.x, self.y, 50, 100)
+        self.rect = Rect(self.x, self.y, self.width, self.height)
 
     def draw(self, surface):
         self.rect.x = self.x
         self.rect.y = self.y
         pygame.draw.rect(surface, Colors.GREEN.value, self.rect)
 
-    def tick(self, board, event):
+    def move_actions(self, board, event):
         if self.rect.colliderect(board.rect):
             self.speedY = 0
 
@@ -33,7 +36,7 @@ class Player:
 
         if event is not None:
             if event.key == pygame.K_SPACE:
-                self.speedY = -10
+                self.speedY = -6
 
         self.move()
 
@@ -41,5 +44,18 @@ class Player:
         self.speedX = self.speedX * 0.8
 
     def move(self):
-        self.x += self.speedX
+        if self.x + self.speedX >= 0 and self.x + self.speedX + self.width <= Sizes.MAP_WIDTH_PIXELS.value:
+            self.x += self.speedX
         self.y += self.speedY
+
+    def check_collisions_with_obstacles(self, board):
+        for o in board.obstacles:
+            if self.rect.colliderect(o.rect):
+                return True
+        return False
+
+    def reset(self):
+        self.x = 50
+        self.y = 200
+        self.speedX = 0
+        self.speedY = 0

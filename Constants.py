@@ -37,3 +37,9 @@ class Actors(Enum):
             return Actors.EMPTY_SPACE
         elif value == 1:
             return Actors.ROCK
+
+
+class GameStatus(Enum):
+    END = 1
+    IS_GOING = 2
+    PAUSE = 3
