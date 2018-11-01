@@ -43,3 +43,4 @@ class GameStatus(Enum):
     END = 1
     IS_GOING = 2
     PAUSE = 3
+    BEGIN = 4

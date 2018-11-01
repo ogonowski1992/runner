@@ -29,7 +29,7 @@ class Board:
         self.time_elapsed_since_last_action += dt
         if self.time_elapsed_since_last_action > self.delay_for_next:
             self.time_elapsed_since_last_action = 0
-            self.delay_for_next = random.randrange(800, 2500)
+            self.delay_for_next = random.randrange(1800, 4000)
             self.generate_obstacles()
 
         for o in self.obstacles:
@@ -40,11 +40,10 @@ class Board:
                 o.tick()
 
     def generate_obstacles(self):
-        self.obstacles.append(Obstacle(700, 380, 2))
+        self.obstacles.append(Obstacle(700, 300, 2))
 
     def reset(self):
         self.points = 0
         self.obstacles = []
         self.time_elapsed_since_last_action = 0
         self.delay_for_next = random.randrange(800, 2500)
-
