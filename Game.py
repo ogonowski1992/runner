@@ -15,6 +15,11 @@ class Game(object):
         pygame.init()
         self.font = pygame.font.SysFont("monospace", 50)
 
+        self.bg = pygame.image.load('assets\\background\\bg_480.png')
+        self.bgX = 0
+        self.bgX2 = 2640
+        self.bgSpeed = 1
+
         self.screen = pygame.display.set_mode(self.resolution)
         self.clock = pygame.time.Clock()
         self.board = Board()
@@ -50,7 +55,15 @@ class Game(object):
             if self.player.check_collisions_with_obstacles(self.board):
                 self.game_status = GameStatus.END
 
-        self.screen.fill((0, 0, 0))
+        self.bgX -= self.bgSpeed
+        self.bgX = self.bgX % -(2640 * 2)
+
+        self.bgX2 -= self.bgSpeed
+        self.bgX2 = self.bgX2 % -(2640 * 2)
+
+        #self.screen.fill((0, 0, 0))
+        self.screen.blit(self.bg, (self.bgX, 0))
+        self.screen.blit(self.bg, (self.bgX2, 0))
         self.board.draw(self.screen)
         self.player.draw(self.screen)
 

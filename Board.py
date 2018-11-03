@@ -19,7 +19,7 @@ class Board:
         self.clock = pygame.time.Clock()
 
     def draw(self, surface):
-        pygame.draw.rect(surface, Colors.RED.value, self.rect)
+        #pygame.draw.rect(surface, Colors.RED.value, self.rect)
 
         for o in self.obstacles:
             o.draw(surface)
