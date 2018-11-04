@@ -15,6 +15,8 @@ class Game(object):
         pygame.init()
         self.font = pygame.font.SysFont("monospace", 50)
 
+        self.splash = pygame.image.load('assets\\background\\splash.png')
+        self.end = pygame.image.load('assets\\background\\end.png')
         self.bg = pygame.image.load('assets\\background\\bg_480.png')
         self.bgX = 0
         self.bgX2 = 2640
@@ -24,6 +26,10 @@ class Game(object):
         self.clock = pygame.time.Clock()
         self.board = Board()
         self.player = Player()
+
+        self.enter_effect = pygame.mixer.Sound('assets\\sound\\bait.wav')
+        pygame.mixer.music.load('assets\\sound\\bg.mp3')
+        pygame.mixer.music.play(-1)
 
         while True:
             if self.game_status == GameStatus.IS_GOING:
@@ -56,12 +62,14 @@ class Game(object):
                 self.game_status = GameStatus.END
 
         self.bgX -= self.bgSpeed
-        self.bgX = self.bgX % -(2640 * 2)
-
         self.bgX2 -= self.bgSpeed
-        self.bgX2 = self.bgX2 % -(2640 * 2)
 
-        #self.screen.fill((0, 0, 0))
+        if self.bgX2 < -2640:
+            self.bgX2 = self.bgX + 2640
+
+        if self.bgX < -2640:
+            self.bgX = self.bgX2 + 2640
+
         self.screen.blit(self.bg, (self.bgX, 0))
         self.screen.blit(self.bg, (self.bgX2, 0))
         self.board.draw(self.screen)
@@ -81,21 +89,17 @@ class Game(object):
                 self.reset()
                 self.game_status = GameStatus.IS_GOING
 
-        self.screen.fill((50, 50, 50))
-        label = self.font.render("Game Over, points: " + str(self.board.points), 1, (100, 100, 100))
-        self.screen.blit(label, (20, 200))
+        self.screen.blit(self.end, (0, 0))
 
     def begin_game_mode(self):
         for event in pygame.event.get():
             self.check_if_exit_game(event)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                self.enter_effect.play()
                 self.game_status = GameStatus.IS_GOING
                 self.clock = pygame.time.Clock()
                 return
-
-        self.screen.fill((50, 50, 50))
-        label = self.font.render("Press enter to start", 1, (100, 100, 100))
-        self.screen.blit(label, (20, 200))
+        self.screen.blit(self.splash, (0, 0))
 
     def check_if_exit_game(self, event):
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):

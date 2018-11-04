@@ -3,7 +3,7 @@ import random
 import pygame
 from pygame.rect import Rect
 
-from Constants import Colors
+from Constants import Colors, Dimensions
 from Obstacle import Obstacle
 
 
@@ -19,7 +19,7 @@ class Board:
         self.clock = pygame.time.Clock()
 
     def draw(self, surface):
-        #pygame.draw.rect(surface, Colors.RED.value, self.rect)
+        # pygame.draw.rect(surface, Colors.RED.value, self.rect)
 
         for o in self.obstacles:
             o.draw(surface)
@@ -40,7 +40,7 @@ class Board:
                 o.tick()
 
     def generate_obstacles(self):
-        self.obstacles.append(Obstacle(700, 300, 2))
+        self.obstacles.append(Obstacle(700, Dimensions.GROUND_LVL, 2))
 
     def reset(self):
         self.points = 0

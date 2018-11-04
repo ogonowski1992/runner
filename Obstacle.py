@@ -3,7 +3,7 @@ import random
 import pygame
 from pygame.rect import Rect
 
-from Constants import Colors
+from Constants import Colors, Dimensions
 
 
 def load_image(name):
@@ -18,6 +18,15 @@ class Obstacle:
         self.x = x
         self.y = y
         self.speed = speed
+
+        self.scream_effect = [pygame.mixer.Sound('assets\\sound\\scream_1.wav'),
+                              pygame.mixer.Sound('assets\\sound\\scream_2.wav'),
+                              pygame.mixer.Sound('assets\\sound\\scream_3.wav')]
+
+        speed_up = random.randint(0, 10) > 6
+        if speed_up:
+            self.speed = self.speed * Dimensions.ZOMBI_BOOST_SPEED_MULTIPLIER
+            self.scream_effect[random.randint(0, 2)].play()
 
         self.rect = Rect(self.x, self.y, self.width, self.height)
 

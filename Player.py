@@ -1,7 +1,7 @@
 import pygame
 from pygame.rect import Rect
 
-from Constants import Colors, Sizes
+from Constants import Colors, Sizes, Dimensions
 
 
 def load_image(name):
@@ -21,18 +21,24 @@ class Player:
         self.speedY = 0
 
         self.jumping = True
+        self.jump_effect = pygame.mixer.Sound('assets\\sound\\jump.wav')
 
         self.rect = Rect(self.x, self.y, self.width, self.height)
         self.clock = pygame.time.Clock()
         self.run_images = []
         self.jump_images = []
+        self.dead_images = []
 
         for i in range(9):
-            picture = pygame.transform.scale(load_image('assets\\player\\_Jump (' + str(i + 1) + ').png'), (80, 105))
-            #pygame.image.save(picture, 'assets\\player\\_Jump (' + str(i + 1) + ').png')
+            picture = load_image('assets\\player\\_Jump (' + str(i + 1) + ').png')
+            # picture = pygame.transform.scale(load_image('assets\\player\\_Jump (' + str(i + 1) + ').png'), (80, 105))
+            # pygame.image.save(picture, 'assets\\player\\_Dead (' + str(i + 1) + ').png')
             self.jump_images.append(picture)
-            picture = pygame.transform.scale(load_image('assets\\player\\_Walk (' + str(i + 1) + ').png'), (80, 105))
+            picture = load_image('assets\\player\\_Walk (' + str(i + 1) + ').png')
             self.run_images.append(picture)
+
+            picture = load_image('assets\\player\\_Dead (' + str(i + 1) + ').png')
+            self.dead_images.append(picture)
         self.index = 0
 
         self.time_for_animation_frame = 60
@@ -58,13 +64,14 @@ class Player:
 
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_SPACE] and self.jumping is False:
+            self.jump_effect.play()
             self.speedY = -8
             self.jumping = True
 
-        if self.y > 300:
+        if self.y > Dimensions.GROUND_LVL:
             self.jumping = False
             self.speedY = 0
-            self.y = 295
+            self.y = Dimensions.GROUND_LVL - 2
 
         if self.jumping is True:
             self.speedY = self.speedY + 0.2

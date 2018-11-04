@@ -25,22 +25,13 @@ class Sizes(Enum):
     MAP_HEIGHT_SQUARE = int(MAP_HEIGHT_PIXELS / SQUARE_SIZE)
 
 
-class Actors(Enum):
-    EMPTY_SPACE = 0
-    ROCK = 1
-    INDESTRUCTIBLE_ROCK = 2
-    PLAYER = 3
-
-    @staticmethod
-    def create(value):
-        if value == 0:
-            return Actors.EMPTY_SPACE
-        elif value == 1:
-            return Actors.ROCK
-
-
 class GameStatus(Enum):
     END = 1
     IS_GOING = 2
     PAUSE = 3
     BEGIN = 4
+
+
+class Dimensions(object):
+    GROUND_LVL = 330
+    ZOMBI_BOOST_SPEED_MULTIPLIER = 1.5
